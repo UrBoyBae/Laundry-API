@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\DetailTransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OutletController;
+use App\Http\Controllers\PackageController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 
 // Request Login
@@ -32,8 +35,18 @@ Route::put('/users/{id}', [UserController::class, 'editUser']);
 Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
 
 // Request Package
-Route::get('/packages', [UserController::class, 'getUser']);
-Route::post('/packages', [UserController::class, 'addUser']);
-Route::get('/packages/{id}', [UserController::class, 'getDetailUser']);
-Route::put('/packages/{id}', [UserController::class, 'editUser']);
-Route::delete('/packages/{id}', [UserController::class, 'deleteUser']);
+Route::get('/packages', [PackageController::class, 'getPackage']);
+Route::post('/packages', [PackageController::class, 'addPackage']);
+Route::get('/packages/{id}', [PackageController::class, 'getDetailPackage']);
+Route::put('/packages/{id}', [PackageController::class, 'editPackage']);
+Route::delete('/packages/{id}', [PackageController::class, 'deletePackage']);
+
+// Request Transactions
+Route::get('/transactions', [TransactionController::class, 'getTransaction']);
+Route::post('/transactions', [TransactionController::class, 'addTransaction']);
+Route::get('/transactions/{id}', [TransactionController::class, 'getDetailTransaction']);
+Route::put('/transactions/{id}', [TransactionController::class, 'editTransaction']);
+Route::delete('/transactions/{id}', [TransactionController::class, 'deleteTransaction']);
+
+// Request Detail Transactions
+Route::get('/detailTransaction/{id}', [DetailTransactionController::class, 'getDetail']);
