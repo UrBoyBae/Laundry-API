@@ -6,6 +6,7 @@ use App\Http\Resources\nonRelationPackageResource;
 use App\Http\Resources\PackageResource;
 use App\Models\PackageModel;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PackageController extends Controller
 {
@@ -32,10 +33,16 @@ class PackageController extends Controller
         ]);
 
         if (!$data) {
-            return response()->json(['message' => 'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Menambahkan Data',
+            ]);
         }
 
-        return response()->json(['message' => 'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_CREATED,
+            'message'=>'Berhasil Menambahkan Data',
+        ]);
     }
 
     public function getDetailPackage($id)
@@ -61,19 +68,31 @@ class PackageController extends Controller
             'harga' => $request->harga,
         ]);
         if(!$data){
-            return response()->json(['message' => 'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Mengubah Data',
+            ]);
         }
 
-        return response()->json(['message' => 'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_ACCEPTED,
+            'message'=>'Berhasil Mengubah Data',
+        ]);
     }
 
     public function deletePackage($id){
         $data = PackageModel::findOrFail($id);
         $data->delete();
         if(!$data){
-            return response()->json(['message'=>'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Menghapus Data',
+            ]);
         }
 
-        return response()->json(['message'=>'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_OK,
+            'message'=>'Berhasil Menghapus Data',
+        ]);
     }
 }

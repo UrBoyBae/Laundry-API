@@ -6,6 +6,7 @@ use App\Http\Resources\nonRelationTransactionResource;
 use App\Http\Resources\TransactionResource;
 use App\Models\TransactionModel;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TransactionController extends Controller
 {
@@ -48,16 +49,22 @@ class TransactionController extends Controller
         ]);
 
         if (!$data) {
-            return response()->json(['message' => 'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Menambahkan Data',
+            ]);
         }
 
-        return response()->json(['message' => 'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_CREATED,
+            'message'=>'Berhasil Menambahkan Data',
+        ]);
     }
 
     public function getDetailTransaction($id)
     {
         $data = TransactionModel::findOrFail($id);
-        return new nonRelationTransactionResource($data);
+        return new TransactionResource($data->loadMissing('outlet:id,nama,alamat', 'member:id,nama,alamat', 'user:id,nama'));
     }
 
     public function editTransaction(Request $request, $id)
@@ -93,19 +100,31 @@ class TransactionController extends Controller
             'id_user' => $request->id_user,
         ]);
         if(!$data){
-            return response()->json(['message' => 'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Mengubah Data',
+            ]);
         }
 
-        return response()->json(['message' => 'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_ACCEPTED,
+            'message'=>'Berhasil Mengubah Data',
+        ]);
     }
 
     public function deleteTransaction($id){
         $data = TransactionModel::findOrFail($id);
         $data->delete();
         if(!$data){
-            return response()->json(['message'=>'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Menghapus Data',
+            ]);
         }
 
-        return response()->json(['message'=>'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_OK,
+            'message'=>'Berhasil Menghapus Data',
+        ]);
     }
 }

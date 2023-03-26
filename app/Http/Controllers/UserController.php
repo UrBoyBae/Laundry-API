@@ -6,6 +6,7 @@ use App\Http\Resources\UserResource;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -35,10 +36,16 @@ class UserController extends Controller
         ]);
 
         if (!$data) {
-            return response()->json(['message'=>'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Menambahkan Data',
+            ]);
         }
 
-        return response()->json(['message'=>'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_CREATED,
+            'message'=>'Berhasil Menambahkan Data',
+        ]);
     }
 
     public function getDetailUser($id)
@@ -68,7 +75,10 @@ class UserController extends Controller
                 'id_outlet' => $request->id_outlet,
                 'role' => $request->role,
             ]);
-            return response()->json(['message'=>'Succeed']);
+            return response()->json([
+                'status' => Response::HTTP_ACCEPTED,
+                'message'=>'Berhasil Mengubah Data',
+            ]);
         } else {
             $data->update([
                 'nama' => $request->nama,
@@ -76,7 +86,10 @@ class UserController extends Controller
                 'id_outlet' => $request->id_outlet,
                 'role' => $request->role,
             ]);
-            return response()->json(['message'=>'Succeed']);
+            return response()->json([
+                'status' => Response::HTTP_ACCEPTED,
+                'message'=>'Berhasil Mengubah Data',
+            ]);
         }
     }
 
@@ -84,9 +97,15 @@ class UserController extends Controller
         $data = UserModel::findOrFail($id);
         $data->delete();
         if(!$data){
-            return response()->json(['message'=>'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Menghapus Data',
+            ]);
         }
 
-        return response()->json(['message'=>'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_OK,
+            'message'=>'Berhasil Menghapus Data',
+        ]);
     }
 }

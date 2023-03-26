@@ -7,6 +7,7 @@ use App\Models\OutletModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Nette\Utils\Json;
+use Symfony\Component\HttpFoundation\Response;
 
 class OutletController extends Controller
 {
@@ -24,10 +25,16 @@ class OutletController extends Controller
 
         $data = OutletModel::create($request->all());
         if(!$data){
-            return response()->json(['message'=>'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Menambahkan Data',
+            ]);
         }
 
-        return response()->json(['message'=>'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_CREATED,
+            'message'=>'Berhasil Menambahkan Data',
+        ]);
     }
 
     public function getDetailOutlet($id) {
@@ -46,10 +53,16 @@ class OutletController extends Controller
         $data->update($request->all());
         
         if(!$data){
-            return response()->json(['message'=>'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Mengubah Data',
+            ]);
         }
 
-        return response()->json(['message'=>'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_ACCEPTED,
+            'message'=>'Berhasil Mengubah Data',
+        ]);
     }
 
     public function deleteOutlet($id) {
@@ -57,9 +70,15 @@ class OutletController extends Controller
         $data->delete();
         
         if(!$data){
-            return response()->json(['message'=>'Failed']);
+            return response()->json([
+                'status' => Response::HTTP_BAD_REQUEST,
+                'message'=>'Gagal Menghapus Data',
+            ]);
         }
 
-        return response()->json(['message'=>'Succeed']);
+        return response()->json([
+            'status' => Response::HTTP_OK,
+            'message'=>'Berhasil Menghapus Data',
+        ]);
     }
 }
